@@ -1,0 +1,14 @@
+services:
+  vscode:
+    build:
+      context: .. # ビルドルート設定
+      args:
+        CONTAINER_USER: ${CONTAINER_USER}
+        CONTAINER_USER_HOME: ${CONTAINER_USER_HOME}
+        CONTAINER_ROOT: ${CONTAINER_ROOT}
+        USER_UID: ${HOST_UID:-2000}
+        USER_GID: ${HOST_GID:-2000}
+      dockerfile: ./.devcontainer/Dockerfile.dev # ビルドに使用するDockerfileの名前を指定
+    volumes:
+      - ..:/workspace/root:cached # ソースルートを共有
+    command: /bin/sh -c "while sleep 1000; do :; done" # 永続的な起動

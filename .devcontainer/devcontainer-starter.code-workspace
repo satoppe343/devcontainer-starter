@@ -1,0 +1,11 @@
+{
+  "folders": [
+    {
+      "path": ".."
+    }
+    // {
+    //   "path": "/some/path/to/add/workspace"
+    // }
+  ],
+  "settings": {}
+}

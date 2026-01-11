@@ -1,0 +1,42 @@
+FROM node:24-slim
+
+ARG CONTAINER_USER
+ARG CONTAINER_USER_HOME
+ARG CONTAINER_ROOT
+ARG USER_UID
+ARG USER_GID=$USER_UID
+
+RUN \
+  apt-get update \ 
+  && apt-get upgrade -y \
+  && apt-get install -y --no-install-recommends \
+  sudo \
+  git \
+  ca-certificates \
+  vim \
+  curl \
+  procps
+
+RUN set -eux; \
+  # ホストのUID/GIDを引き渡す場合、OS上に既にUID/GIDが存在してもエラーが発生しないようにする為の削除処理
+  if getent passwd "${USER_UID}" >/dev/null; then \
+  olduser=$(getent passwd "${USER_UID}" | cut -d: -f1); \
+  echo "USER_UID ${USER_UID} already used by ${olduser}, deleting..."; \
+  userdel -r -f "${olduser}" || true; \
+  fi; \
+  if getent group "${USER_GID}" >/dev/null; then \
+  oldgroup=$(getent group "${USER_GID}" | cut -d: -f1); \
+  echo "USER_GID ${USER_GID} already used by ${oldgroup}, deleting..."; \
+  groupdel "${oldgroup}" || true; \
+  fi
+
+RUN set -eux; \
+  # create user
+  groupadd -g ${USER_GID} ${CONTAINER_USER} \
+  && useradd -s /bin/zsh -u ${USER_UID} -g ${USER_GID} -m ${CONTAINER_USER} \
+  # sudo setting
+  && echo ${CONTAINER_USER} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${CONTAINER_USER} \
+  && chmod 0440 /etc/sudoers.d/${CONTAINER_USER}
+
+USER ${CONTAINER_USER}
+WORKDIR ${CONTAINER_ROOT}

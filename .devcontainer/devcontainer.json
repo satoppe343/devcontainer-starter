@@ -1,0 +1,85 @@
+{
+  "name": "devcontainer-starter",
+  "dockerComposeFile": ["./docker-compose.dev.yml"],
+  "service": "vscode",
+// workspace直下だと権限問題が発生しやすい為、サブフォルダをworkspaceとして指定する
+  "workspaceFolder": "/workspace/root",
+  "remoteUser": "vscode",
+  "remoteEnv": {
+    "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
+  },
+  "features": {
+    // Zshインストール
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "configureZshAsDefaultShell": true,
+      "installZsh": true,
+      "installOhMyZsh": true,
+      "upgradePackages": true
+    }
+  },
+  "postCreateCommand": ".devcontainer/postCreate.sh",
+  "initializeCommand": ".devcontainer/initialize.sh",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        // 規定シェル
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        // .code-workspaceファイルを開く設定(workspaceにフォルダを追加する場合の設定で、追加しない場合は下記をコメントアウト)
+        "autoOpenWorkspace.enableAutoOpenAlwaysFirst": true,
+        // 各言語共通設定
+        "editor.formatOnSave": true,
+        "editor.formatOnPaste": true,
+        "editor.wordWrapColumn": 120,
+        "editor.tabSize": 2,
+        "editor.fontSize": 14,
+        "editor.wordWrap": "off",
+        // Emmitを使用する言語
+        "emmet.includeLanguages": {
+          // "javascript": "javascriptreact",
+          // "typescript": "typescriptreact"
+        },
+        // 各言語のデフォルトフォーマッター設定
+        "[json]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[yaml]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[markdown]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        // 括弧記号色付
+        "editor.bracketPairColorization.enabled": true,
+        "editor.guides.bracketPairs": true,
+        // ESLintの対象を設定
+        "eslint.validate": [],
+        // 保存時に実行されるコードアクションを有効に設定
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "explicit",
+          "source.organizeImports": "never"
+        }
+      },
+      // 拡張機能を追加
+      "extensions": [
+        "ms-ceintl.vscode-language-pack-ja", // Japanese Language Pack for Visual Studio Code
+        "visualstudioexptteam.vscodeintellicode", // Visual Studio IntelliCode
+        "dbaeumer.vscode-eslint", // VS Code ESLint
+        "esbenp.prettier-vscode", // Prettier - Code formatter
+        "truman.autocomplate-shell", // AutoComplate shell
+        "formulahendry.auto-rename-tag", // Auto Rename Tag
+        "eamodio.gitlens", // GitLens - Git superchaged
+        "donjayamanne.githistory", // Git History
+        "oderwat.indent-rainbow", // indent-rainbow
+        "mechatroner.rainbow-csv", // Rainbow CSV
+        "streetsidesoftware.code-spell-checker", // Code Spell Checker
+        "yzhang.markdown-all-in-one", // Markdown All in One
+        "shd101wyy.markdown-preview-enhanced", // Markdown Preview Enhanced
+        "bierner.markdown-mermaid", // Markdown Preview Mermaid Support
+        "zainChen.json", // json
+        "mikestead.dotenv", // DotEnv
+        "ms-azuretools.vscode-docker", // docker
+        "zoma.vscode-auto-open-workspace" // open .code-workspace
+      ]
+    }
+  }
+}
