@@ -22,6 +22,10 @@
   "customizations": {
     "vscode": {
       "settings": {
+        // 文字コード設定
+        "files.encoding": "utf8",
+        // フォント指定
+        "editor.fontFamily": "'PlemolJP', Consolas, 'Courier New', monospace",
         // 規定シェル
         "terminal.integrated.defaultProfile.linux": "zsh",
         // .code-workspaceファイルを開く設定(workspaceにフォルダを追加する場合の設定で、追加しない場合は下記をコメントアウト)
@@ -82,7 +86,8 @@
         "zainChen.json", // json
         "mikestead.dotenv", // DotEnv
         "ms-azuretools.vscode-docker", // docker
-        "zoma.vscode-auto-open-workspace" // open .code-workspace
+        "zoma.vscode-auto-open-workspace", // open .code-workspace
+        "vscode-icons-team.vscode-icons" // rich icon
       ]
     }
   }

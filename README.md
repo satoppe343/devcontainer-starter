@@ -8,6 +8,7 @@ VSCode で Dev Container による開発環境を構築する際にすぐに使�
 - 環境を構築する時にトラブルになりやすいユーザー情報(UID/GID)について、ホスト OS から引き継いだ値で Dev Container 用ユーザー情報を作成するようにしてファイル権限を変更しなくて良いようにした
 - zshとOh My Zsh!をインストールしてコマンド補完・各種コマンドのサジェストなどが効くようにした
 - 実際に使用する時に必要となる各種ライブラリインストール・初期設定用シェルの雛形や、ワークスペースにフォルダを追加する事を考慮
+- 日本語の等幅フォント（[PlemolJP v3.0.0](https://github.com/yuru7/PlemolJP/releases/tag/v3.0.0)）をインストール（font設定のサンプルとして不要なら削除 ⭐︎本来ならインターネット上のファイルをDev Container から直接ダウンロードして設定すべきだと思いますが、暫定版としてソースにダウンロード済みのフォントファイルを展開して設定しています ）
 
 ## 使用方法
 
@@ -64,9 +65,9 @@ docker rm -f $(docker ps -a | grep devcontainer-starter | cut -d ' ' -f 1)
 
 ※何か不明な不具合が発生した場合はコンテナを削除してみると解決する場合が多いです
 
-### 4. 機能拡張について
+### 4. カスタマイズに関して
 
-Dev Container ワークスペースにフォルダを追加したい場合、`/docker-compose.dev.yml
+- Dev Container ワークスペースにフォルダを追加したい場合、`/docker-compose.dev.yml
 ` に追加したいディレクトリをVolumeマウントする記述をして `devcontainer-starter.code-workspace`にVolumeマウントされたパスを追加してください
 
 ```docker-compose.dev.yml
@@ -82,10 +83,24 @@ Dev Container ワークスペースにフォルダを追加したい場合、`/d
     }
 ```
 
-Dockerイメージの肥大化や頻繁な更新を避けるため、プログラムやライブラリのインストールや初期設定処理は `
+- 日本語の等幅フォント設定について
+  下記バージョンを使用しています
+
+  [PlemolJP v3.0.0](https://github.com/yuru7/PlemolJP/releases/tag/v3.0.0)
+
+  上記より `PlemolJP_v3.0.0.zip` を取得して展開される下記のファイル群のうち、ファイルサイズの関係から `PlemolJP` ディレクトリのみ 圧縮して `.devcontainer/fonts/PlemolJP.tar.gz` に格納し、そのファイルを Dev Container にて展開して設定しています
+
+```:PlemolJP_v3.0.0.zip ファイル展開後
+PlemolJP
+PlemolJP35
+PlemolJP35Console
+PlemolJPConsole
+```
+
+- Dockerイメージの肥大化や頻繁な更新を避けるため、プログラムやライブラリのインストールや初期設定処理はなるべく `
 Dockerfile.dev` に記述せず、`postCreate.sh` に記述する事をおススメします
 
-### 5. その他
+### 5. ユーザー情報(UID/GID)設定について
 
 Devcontainer 実行ユーザーのユーザー情報(UID/GID)をホスト OS から引き継がないで新規 ID を振るように変更したい場合は下記設定を変更してください
 ただしその場合、ファイル権限の設定変更など別途検討して対応する必要があります（そういった検討を避ける為に現在の仕様で環境作成するようにしています）
