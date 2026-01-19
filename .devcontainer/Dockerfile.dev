@@ -15,7 +15,8 @@ RUN \
   ca-certificates \
   vim \
   curl \
-  procps
+  procps \ 
+  fontconfig
 
 RUN set -eux; \
   # ホストのUID/GIDを引き渡す場合、OS上に既にUID/GIDが存在してもエラーが発生しないようにする為の削除処理
@@ -40,3 +41,12 @@ RUN set -eux; \
 
 USER ${CONTAINER_USER}
 WORKDIR ${CONTAINER_ROOT}
+
+# フォントファイルをコピーして展開
+RUN sudo mkdir -p /usr/local/share/fonts
+COPY --chown=root:root ./.devcontainer/fonts/PlemolJP.tar.gz /usr/local/share/fonts/
+RUN sudo tar -xzf /usr/local/share/fonts/PlemolJP.tar.gz -C /usr/local/share/fonts/ \
+  && sudo rm /usr/local/share/fonts/PlemolJP.tar.gz
+
+# フォントキャッシュを更新
+RUN fc-cache -f -v
