@@ -2,8 +2,12 @@
 
 ## はじめに
 
-VSCode で Dev Container による開発環境を構築する時のテンプレートを作成しました（nodeJS を使用する想定）<br>
-特に 環境を構築する時にトラブルになりやすいユーザー情報(UID/GID)について、ホスト OS から引き継いだ値で Dev Container 用ユーザー情報を作成するようにしています<br>
+VSCode で Dev Container による開発環境を構築する際にすぐに使用できるテンプレートを作成しました<br>
+毎回Docker関連のファイル修正などで時間が取られる為、主に自分用にシンプルな雛形を用意しました<br>
+
+- 環境を構築する時にトラブルになりやすいユーザー情報(UID/GID)について、ホスト OS から引き継いだ値で Dev Container 用ユーザー情報を作成するようにしてファイル権限を変更しなくて良いようにした
+- zshとOh My Zsh!をインストールしてコマンド補完・各種コマンドのサジェストなどが効くようにした
+- 実際に使用する時に必要となる各種ライブラリインストール・初期設定用シェルの雛形や、ワークスペースにフォルダを追加する事を考慮
 
 ## 使用方法
 
@@ -16,14 +20,16 @@ VSCode で Dev Container による開発環境を構築する時のテンプレ�
 - Visual Studio Code
 - VSCode Dev Containers 拡張機能 or Remote Development
 - Zsh
-  (Windows/WSL2 での動作確認はしていませんが Windows 環境でも Docker 実行及び WSL2 ユーザーのシェルが zsh となっていれば動作すると思います)
+  (Windows/WSL2 での動作確認はしていませんが Windows 環境でも Docker 実行及び WSL2 が設定されていれば動作すると思います)
 
 ### 2.セットアップ手順
 
 リポジトリのクローン
 
 ```mac
-git clone https://github.com/satoppe343/devcontainer-starter.git
+mkdir ${proj}
+cd ${proj}
+git clone https://github.com/satoppe343/devcontainer-starter.git .
 ```
 
 下記操作を行いクローンしたリポジトリを Dev Container で開く
@@ -58,10 +64,31 @@ docker rm -f $(docker ps -a | grep devcontainer-starter | cut -d ' ' -f 1)
 
 ※何か不明な不具合が発生した場合はコンテナを削除してみると解決する場合が多いです
 
-### 4. その他
+### 4. 機能拡張について
+
+Dev Container ワークスペースにフォルダを追加したい場合、`/docker-compose.dev.yml
+` に追加したいディレクトリをVolumeマウントする記述をして `devcontainer-starter.code-workspace`にVolumeマウントされたパスを追加してください
+
+```docker-compose.dev.yml
+    volumes:
+    ...
+      - ${ホストOSディレクトリ}:{Devcontainerディレクトリ}
+
+```
+
+```devcontainer-starter.code-workspace
+    {
+      "path": {Devcontainerディレクトリ}
+    }
+```
+
+Dockerイメージの肥大化や頻繁な更新を避けるため、プログラムやライブラリのインストールや初期設定処理は `
+Dockerfile.dev` に記述せず、`postCreate.sh` に記述する事をおススメします
+
+### 5. その他
 
 Devcontainer 実行ユーザーのユーザー情報(UID/GID)をホスト OS から引き継がないで新規 ID を振るように変更したい場合は下記設定を変更してください
-ただしその場合、ファイル権限の設定変更など更に追加で設定が必要になるはずですが、現時点では未検討で動作確認もしていない為、必要な修正を別途検討して対応する必要があります（そういった検討を避ける為に現在の仕様で環境作成するようにしています）
+ただしその場合、ファイル権限の設定変更など別途検討して対応する必要があります（そういった検討を避ける為に現在の仕様で環境作成するようにしています）
 
 - `initialize.sh` の下記について固定値(2000 など)を設定するように変更（`.env`をファイルとして作成し、スクリプトで都度作成する処理を削除する方がベター）
 
