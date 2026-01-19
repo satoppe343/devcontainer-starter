@@ -62,7 +62,6 @@
       // 拡張機能を追加
       "extensions": [
         "ms-ceintl.vscode-language-pack-ja", // Japanese Language Pack for Visual Studio Code
-        "visualstudioexptteam.vscodeintellicode", // Visual Studio IntelliCode
         "dbaeumer.vscode-eslint", // VS Code ESLint
         "esbenp.prettier-vscode", // Prettier - Code formatter
         "truman.autocomplate-shell", // AutoComplate shell
