@@ -8,7 +8,7 @@ VSCode で Dev Container による開発環境を構築する際にすぐに使�
 - 環境を構築する時にトラブルになりやすいユーザー情報(UID/GID)について、ホスト OS から引き継いだ値で Dev Container 用ユーザー情報を作成するようにしてファイル権限を変更しなくて良いようにした
 - zshとOh My Zsh!をインストールしてコマンド補完・各種コマンドのサジェストなどが効くようにした
 - 実際に使用する時に必要となる各種ライブラリインストール・初期設定用シェルの雛形や、ワークスペースにフォルダを追加する事を考慮
-- 日本語の等幅フォント（[PlemolJP v3.0.0](https://github.com/yuru7/PlemolJP/releases/tag/v3.0.0)）をインストール（font設定のサンプルとして不要なら削除 ⭐︎本来ならインターネット上のファイルをDev Container から直接ダウンロードして設定すべきだと思いますが、暫定版としてソースにダウンロード済みのフォントファイルを展開して設定しています ）
+- 日本語の等幅フォント（[HackGen v2.10.0](https://github.com/yuru7/HackGen/releases/tag/v2.10.0)）をインストール（font設定のサンプルとして不要なら削除
 
 ## 使用方法
 
@@ -86,15 +86,28 @@ docker rm -f $(docker ps -a | grep devcontainer-starter | cut -d ' ' -f 1)
 - 日本語の等幅フォント設定について
   下記バージョンを使用しています
 
-  [PlemolJP v3.0.0](https://github.com/yuru7/PlemolJP/releases/tag/v3.0.0)
+  [HackGen v2.10.0](https://github.com/yuru7/HackGen/releases/tag/v2.10.0)
 
-  上記より `PlemolJP_v3.0.0.zip` を取得して展開される下記のファイル群のうち、ファイルサイズの関係から `PlemolJP` ディレクトリのみ 圧縮して `.devcontainer/fonts/PlemolJP.tar.gz` に格納し、そのファイルを Dev Container にて展開して設定しています
+日本語フォントが不要な場合は下記の部分をコメントアウトしてください
 
-```:PlemolJP_v3.0.0.zip ファイル展開後
-PlemolJP
-PlemolJP35
-PlemolJP35Console
-PlemolJPConsole
+.devcontainer/Dockerfile.de
+
+```:.devcontainer/Dockerfile.dev
+# フォントファイルをコピーして展開
+RUN sudo mkdir -p /usr/local/share/fonts
+RUN sudo wget -O /usr/local/share/fonts/HackGen_v2.10.0.zip https://github.com/yuru7/HackGen/releases/download/v2.10.0/HackGen_v2.10.0.zip \
+  && sudo unzip /usr/local/share/fonts/HackGen_v2.10.0.zip -d /usr/local/share/fonts/ \
+  && sudo rm /usr/local/share/fonts/HackGen_v2.10.0.zip
+
+# フォントキャッシュを更新
+RUN fc-cache -f -v
+```
+
+.devcontainer/devcontainer.json
+
+```:.devcontainer/devcontainer.json
+        // フォント指定
+        "editor.fontFamily": "HackGen, Consolas, 'Courier New', monospace",
 ```
 
 - Dockerイメージの肥大化や頻繁な更新を避けるため、プログラムやライブラリのインストールや初期設定処理はなるべく `

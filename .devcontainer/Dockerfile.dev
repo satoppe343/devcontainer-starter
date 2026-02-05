@@ -16,7 +16,9 @@ RUN \
   vim \
   curl \
   procps \ 
-  fontconfig
+  fontconfig \ 
+  wget \
+  unzip
 
 RUN set -eux; \
   # ホストのUID/GIDを引き渡す場合、OS上に既にUID/GIDが存在してもエラーが発生しないようにする為の削除処理
@@ -44,9 +46,9 @@ WORKDIR ${CONTAINER_ROOT}
 
 # フォントファイルをコピーして展開
 RUN sudo mkdir -p /usr/local/share/fonts
-COPY --chown=root:root ./.devcontainer/fonts/PlemolJP.tar.gz /usr/local/share/fonts/
-RUN sudo tar -xzf /usr/local/share/fonts/PlemolJP.tar.gz -C /usr/local/share/fonts/ \
-  && sudo rm /usr/local/share/fonts/PlemolJP.tar.gz
+RUN sudo wget -O /usr/local/share/fonts/HackGen_v2.10.0.zip https://github.com/yuru7/HackGen/releases/download/v2.10.0/HackGen_v2.10.0.zip \
+  && sudo unzip /usr/local/share/fonts/HackGen_v2.10.0.zip -d /usr/local/share/fonts/ \
+  && sudo rm /usr/local/share/fonts/HackGen_v2.10.0.zip
 
 # フォントキャッシュを更新
 RUN fc-cache -f -v
