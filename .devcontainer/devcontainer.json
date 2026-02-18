@@ -53,11 +53,12 @@
         "editor.bracketPairColorization.enabled": true,
         "editor.guides.bracketPairs": true,
         // ESLintの対象を設定
-        "eslint.validate": [],
+        // "eslint.validate": [],
         // 保存時に実行されるコードアクションを有効に設定
         "editor.codeActionsOnSave": {
           "source.fixAll.eslint": "explicit",
-          "source.organizeImports": "never"
+          "source.addMissingImports": "explicit", // import文の 自動追加
+          "source.organizeImports": "explicit" // import文の 自動未使用import削除 & 自動アルファベット順ソート
         }
       },
       // 拡張機能を追加
@@ -79,7 +80,9 @@
         "mikestead.dotenv", // DotEnv
         "ms-azuretools.vscode-docker", // docker
         "zoma.vscode-auto-open-workspace", // open .code-workspace
-        "vscode-icons-team.vscode-icons" // rich icon
+        "vscode-icons-team.vscode-icons", // rich icon
+        "dsznajder.es7-react-js-snippets", // ES7+ React/Redux/React-Native snippets
+        "styled-components.vscode-styled-components" // CSS styled-components
       ]
     }
   }

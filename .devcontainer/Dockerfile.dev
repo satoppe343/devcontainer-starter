@@ -20,7 +20,7 @@ RUN \
   wget \
   unzip
 
-RUN set -eux; \
+  RUN set -eux; \
   # ホストのUID/GIDを引き渡す場合、OS上に既にUID/GIDが存在してもエラーが発生しないようにする為の削除処理
   if getent passwd "${USER_UID}" >/dev/null; then \
   olduser=$(getent passwd "${USER_UID}" | cut -d: -f1); \
@@ -45,8 +45,8 @@ USER ${CONTAINER_USER}
 WORKDIR ${CONTAINER_ROOT}
 
 # フォントファイルをコピーして展開
-RUN sudo mkdir -p /usr/local/share/fonts
-RUN sudo wget -O /usr/local/share/fonts/HackGen_v2.10.0.zip https://github.com/yuru7/HackGen/releases/download/v2.10.0/HackGen_v2.10.0.zip \
+RUN sudo mkdir -p /usr/local/share/fonts \ 
+  && sudo wget -O /usr/local/share/fonts/HackGen_v2.10.0.zip https://github.com/yuru7/HackGen/releases/download/v2.10.0/HackGen_v2.10.0.zip \
   && sudo unzip /usr/local/share/fonts/HackGen_v2.10.0.zip -d /usr/local/share/fonts/ \
   && sudo rm /usr/local/share/fonts/HackGen_v2.10.0.zip
 
